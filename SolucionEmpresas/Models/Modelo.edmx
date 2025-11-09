@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FinanzasEmpresasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Empresas">
+          <Key>
+            <PropertyRef Name="EmpresaId" />
+          </Key>
+          <Property Name="EmpresaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreEmpresa" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="NIT" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sector" Type="nvarchar" MaxLength="100" />
+          <Property Name="FechaCreacion" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EstadosFinancieros">
+          <Key>
+            <PropertyRef Name="EstadoId" />
+          </Key>
+          <Property Name="EstadoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpresaId" Type="int" Nullable="false" />
+          <Property Name="Periodo" Type="date" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="FechaCargue" Type="datetime" Nullable="false" />
+          <Property Name="ActivoCorriente" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PasivoCorriente" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ActivoTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PasivoTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Patrimonio" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IngresosOperacionales" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadBruta" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadOperativa" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadNeta" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="IndicadoresCalculados">
+          <Key>
+            <PropertyRef Name="IndicadorId" />
+          </Key>
+          <Property Name="IndicadorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EstadoId" Type="int" Nullable="false" />
+          <Property Name="LiquidezCorriente" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="RazonEndeudamiento" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="MargenBruto" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="MargenOperativo" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="MargenNeto" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="ROA" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="ROE" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="RotacionActivos" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="CapitalTrabajo" Type="decimal" Precision="18" Scale="4" />
+        </EntityType>
+        <Association Name="FK__EstadosFi__Empre__267ABA7A">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
+          <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="EstadosFinancieros">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Indicador__Estad__29572725">
+          <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="1" />
+          <End Role="IndicadoresCalculados" Type="Self.IndicadoresCalculados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadosFinancieros">
+              <PropertyRef Name="EstadoId" />
+            </Principal>
+            <Dependent Role="IndicadoresCalculados">
+              <PropertyRef Name="EstadoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CalcularIndicadores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="FinanzasEmpresasModelStoreContainer">
+          <EntitySet Name="Empresas" EntityType="Self.Empresas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EstadosFinancieros" EntityType="Self.EstadosFinancieros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndicadoresCalculados" EntityType="Self.IndicadoresCalculados" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__EstadosFi__Empre__267ABA7A" Association="Self.FK__EstadosFi__Empre__267ABA7A">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Indicador__Estad__29572725" Association="Self.FK__Indicador__Estad__29572725">
+            <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
+            <End Role="IndicadoresCalculados" EntitySet="IndicadoresCalculados" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FinanzasEmpresasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Empresas">
+          <Key>
+            <PropertyRef Name="EmpresaId" />
+          </Key>
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreEmpresa" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NIT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sector" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__EstadosFi__Empre__267ABA7A" FromRole="Empresas" ToRole="EstadosFinancieros" />
+        </EntityType>
+        <EntityType Name="EstadosFinancieros">
+          <Key>
+            <PropertyRef Name="EstadoId" />
+          </Key>
+          <Property Name="EstadoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" />
+          <Property Name="Periodo" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FechaCargue" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ActivoCorriente" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PasivoCorriente" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ActivoTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PasivoTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Patrimonio" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IngresosOperacionales" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadBruta" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadOperativa" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UtilidadNeta" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Empresas" Relationship="Self.FK__EstadosFi__Empre__267ABA7A" FromRole="EstadosFinancieros" ToRole="Empresas" />
+          <NavigationProperty Name="IndicadoresCalculados" Relationship="Self.FK__Indicador__Estad__29572725" FromRole="EstadosFinancieros" ToRole="IndicadoresCalculados" />
+        </EntityType>
+        <EntityType Name="IndicadoresCalculados">
+          <Key>
+            <PropertyRef Name="IndicadorId" />
+          </Key>
+          <Property Name="IndicadorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EstadoId" Type="Int32" Nullable="false" />
+          <Property Name="LiquidezCorriente" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="RazonEndeudamiento" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="MargenBruto" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="MargenOperativo" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="MargenNeto" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="ROA" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="ROE" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="RotacionActivos" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CapitalTrabajo" Type="Decimal" Precision="18" Scale="4" />
+          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__Indicador__Estad__29572725" FromRole="IndicadoresCalculados" ToRole="EstadosFinancieros" />
+        </EntityType>
+        <Association Name="FK__EstadosFi__Empre__267ABA7A">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
+          <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="EstadosFinancieros">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Indicador__Estad__29572725">
+          <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="1" />
+          <End Role="IndicadoresCalculados" Type="Self.IndicadoresCalculados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadosFinancieros">
+              <PropertyRef Name="EstadoId" />
+            </Principal>
+            <Dependent Role="IndicadoresCalculados">
+              <PropertyRef Name="EstadoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbFinanzasEmpresasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Empresas" EntityType="Self.Empresas" />
+          <EntitySet Name="EstadosFinancieros" EntityType="Self.EstadosFinancieros" />
+          <EntitySet Name="IndicadoresCalculados" EntityType="Self.IndicadoresCalculados" />
+          <AssociationSet Name="FK__EstadosFi__Empre__267ABA7A" Association="Self.FK__EstadosFi__Empre__267ABA7A">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Indicador__Estad__29572725" Association="Self.FK__Indicador__Estad__29572725">
+            <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
+            <End Role="IndicadoresCalculados" EntitySet="IndicadoresCalculados" />
+          </AssociationSet>
+          <FunctionImport Name="CalcularIndicadores" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FinanzasEmpresasModelStoreContainer" CdmEntityContainer="dbFinanzasEmpresasEntities">
+          <EntitySetMapping Name="Empresas">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.Empresas">
+              <MappingFragment StoreEntitySet="Empresas">
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+                <ScalarProperty Name="NombreEmpresa" ColumnName="NombreEmpresa" />
+                <ScalarProperty Name="NIT" ColumnName="NIT" />
+                <ScalarProperty Name="Sector" ColumnName="Sector" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EstadosFinancieros">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.EstadosFinancieros">
+              <MappingFragment StoreEntitySet="EstadosFinancieros">
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="FechaCargue" ColumnName="FechaCargue" />
+                <ScalarProperty Name="ActivoCorriente" ColumnName="ActivoCorriente" />
+                <ScalarProperty Name="PasivoCorriente" ColumnName="PasivoCorriente" />
+                <ScalarProperty Name="ActivoTotal" ColumnName="ActivoTotal" />
+                <ScalarProperty Name="PasivoTotal" ColumnName="PasivoTotal" />
+                <ScalarProperty Name="Patrimonio" ColumnName="Patrimonio" />
+                <ScalarProperty Name="IngresosOperacionales" ColumnName="IngresosOperacionales" />
+                <ScalarProperty Name="UtilidadBruta" ColumnName="UtilidadBruta" />
+                <ScalarProperty Name="UtilidadOperativa" ColumnName="UtilidadOperativa" />
+                <ScalarProperty Name="UtilidadNeta" ColumnName="UtilidadNeta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndicadoresCalculados">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.IndicadoresCalculados">
+              <MappingFragment StoreEntitySet="IndicadoresCalculados">
+                <ScalarProperty Name="IndicadorId" ColumnName="IndicadorId" />
+                <ScalarProperty Name="EstadoId" ColumnName="EstadoId" />
+                <ScalarProperty Name="LiquidezCorriente" ColumnName="LiquidezCorriente" />
+                <ScalarProperty Name="RazonEndeudamiento" ColumnName="RazonEndeudamiento" />
+                <ScalarProperty Name="MargenBruto" ColumnName="MargenBruto" />
+                <ScalarProperty Name="MargenOperativo" ColumnName="MargenOperativo" />
+                <ScalarProperty Name="MargenNeto" ColumnName="MargenNeto" />
+                <ScalarProperty Name="ROA" ColumnName="ROA" />
+                <ScalarProperty Name="ROE" ColumnName="ROE" />
+                <ScalarProperty Name="RotacionActivos" ColumnName="RotacionActivos" />
+                <ScalarProperty Name="CapitalTrabajo" ColumnName="CapitalTrabajo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CalcularIndicadores" FunctionName="FinanzasEmpresasModel.Store.CalcularIndicadores" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
