@@ -1,0 +1,48 @@
+﻿@model SolucionEmpresas.Models.Empresas
+
+@{
+    ViewBag.Title = "Crear Empresa";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>@ViewBag.Title</h1>
+            <hr />
+
+            @using (Html.BeginForm("Create", "Empresas", FormMethod.Post, new { @class = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group mb-3">
+                    @Html.LabelFor(model => model.NIT)
+                    @Html.TextBoxFor(model => model.NIT, new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.NIT, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    @Html.LabelFor(model => model.NombreEmpresa)
+                    @Html.TextBoxFor(model => model.NombreEmpresa, new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.NombreEmpresa, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    @Html.LabelFor(model => model.Direccion)
+                    @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control", @rows = 3 })
+                    @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    @Html.LabelFor(model => model.Telefono)
+                    @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

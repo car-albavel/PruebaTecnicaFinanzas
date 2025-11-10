@@ -4,7 +4,30 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FinanzasEmpresasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="FinanzasEmpresasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CargasArchivos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpresaId" Type="int" Nullable="false" />
+          <Property Name="NombreArchivo" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="RutaArchivo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FechaCarga" Type="datetime" Nullable="false" />
+          <Property Name="TipoArchivo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Procesado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpresaId" Type="int" Nullable="false" />
+          <Property Name="Numero" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Activa" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Empresas">
           <Key>
             <PropertyRef Name="EmpresaId" />
@@ -12,7 +35,9 @@
           <Property Name="EmpresaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NombreEmpresa" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="NIT" Type="nvarchar" MaxLength="50" />
-          <Property Name="Sector" Type="nvarchar" MaxLength="100" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="100" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="20" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
           <Property Name="FechaCreacion" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="EstadosFinancieros">
@@ -34,6 +59,20 @@
           <Property Name="UtilidadOperativa" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UtilidadNeta" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
+        <EntityType Name="Indicadores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpresaId" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Formula" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Valor" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="Periodo" Type="datetime" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="IndicadoresCalculados">
           <Key>
             <PropertyRef Name="IndicadorId" />
@@ -50,7 +89,35 @@
           <Property Name="RotacionActivos" Type="decimal" Precision="18" Scale="4" />
           <Property Name="CapitalTrabajo" Type="decimal" Precision="18" Scale="4" />
         </EntityType>
-        <Association Name="FK__EstadosFi__Empre__267ABA7A">
+        <Association Name="FK__CargasArc__Empre__2F10007B">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CargasArchivos" Type="Self.CargasArchivos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="CargasArchivos">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Cuentas__Empresa__3A81B327">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="Cuentas">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EstadosFi__Empre__276EDEB3">
           <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
           <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="*" />
           <ReferentialConstraint>
@@ -62,7 +129,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Indicador__Estad__29572725">
+        <Association Name="FK__Indicador__Empre__33D4B598">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Indicadores" Type="Self.Indicadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="Indicadores">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Indicador__Estad__2A4B4B5E">
           <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="1" />
           <End Role="IndicadoresCalculados" Type="Self.IndicadoresCalculados" Multiplicity="*" />
           <ReferentialConstraint>
@@ -76,20 +157,34 @@
         </Association>
         <Function Name="CalcularIndicadores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="FinanzasEmpresasModelStoreContainer">
+          <EntitySet Name="CargasArchivos" EntityType="Self.CargasArchivos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Empresas" EntityType="Self.Empresas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadosFinancieros" EntityType="Self.EstadosFinancieros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Indicadores" EntityType="Self.Indicadores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndicadoresCalculados" EntityType="Self.IndicadoresCalculados" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__EstadosFi__Empre__267ABA7A" Association="Self.FK__EstadosFi__Empre__267ABA7A">
+          <AssociationSet Name="FK__CargasArc__Empre__2F10007B" Association="Self.FK__CargasArc__Empre__2F10007B">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="CargasArchivos" EntitySet="CargasArchivos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Cuentas__Empresa__3A81B327" Association="Self.FK__Cuentas__Empresa__3A81B327">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Cuentas" EntitySet="Cuentas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EstadosFi__Empre__276EDEB3" Association="Self.FK__EstadosFi__Empre__276EDEB3">
             <End Role="Empresas" EntitySet="Empresas" />
             <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
           </AssociationSet>
-          <AssociationSet Name="FK__Indicador__Estad__29572725" Association="Self.FK__Indicador__Estad__29572725">
+          <AssociationSet Name="FK__Indicador__Empre__33D4B598" Association="Self.FK__Indicador__Empre__33D4B598">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Indicadores" EntitySet="Indicadores" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Indicador__Estad__2A4B4B5E" Association="Self.FK__Indicador__Estad__2A4B4B5E">
             <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
             <End Role="IndicadoresCalculados" EntitySet="IndicadoresCalculados" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FinanzasEmpresasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -100,9 +195,14 @@
           <Property Name="EmpresaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NombreEmpresa" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="NIT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Sector" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
           <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__EstadosFi__Empre__267ABA7A" FromRole="Empresas" ToRole="EstadosFinancieros" />
+          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__EstadosFi__Empre__276EDEB3" FromRole="Empresas" ToRole="EstadosFinancieros" />
+          <NavigationProperty Name="CargasArchivos" Relationship="FinanzasEmpresasModel.FK__CargasArc__Empre__2F10007B" FromRole="Empresas" ToRole="CargasArchivos" />
+          <NavigationProperty Name="Indicadores" Relationship="FinanzasEmpresasModel.FK__Indicador__Empre__33D4B598" FromRole="Empresas" ToRole="Indicadores" />
+          <NavigationProperty Name="Cuentas" Relationship="FinanzasEmpresasModel.FK__Cuentas__Empresa__3A81B327" FromRole="Empresas" ToRole="Cuentas" />
         </EntityType>
         <EntityType Name="EstadosFinancieros">
           <Key>
@@ -122,8 +222,8 @@
           <Property Name="UtilidadBruta" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UtilidadOperativa" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UtilidadNeta" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Empresas" Relationship="Self.FK__EstadosFi__Empre__267ABA7A" FromRole="EstadosFinancieros" ToRole="Empresas" />
-          <NavigationProperty Name="IndicadoresCalculados" Relationship="Self.FK__Indicador__Estad__29572725" FromRole="EstadosFinancieros" ToRole="IndicadoresCalculados" />
+          <NavigationProperty Name="Empresas" Relationship="Self.FK__EstadosFi__Empre__276EDEB3" FromRole="EstadosFinancieros" ToRole="Empresas" />
+          <NavigationProperty Name="IndicadoresCalculados" Relationship="Self.FK__Indicador__Estad__2A4B4B5E" FromRole="EstadosFinancieros" ToRole="IndicadoresCalculados" />
         </EntityType>
         <EntityType Name="IndicadoresCalculados">
           <Key>
@@ -140,9 +240,9 @@
           <Property Name="ROE" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="RotacionActivos" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="CapitalTrabajo" Type="Decimal" Precision="18" Scale="4" />
-          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__Indicador__Estad__29572725" FromRole="IndicadoresCalculados" ToRole="EstadosFinancieros" />
+          <NavigationProperty Name="EstadosFinancieros" Relationship="Self.FK__Indicador__Estad__2A4B4B5E" FromRole="IndicadoresCalculados" ToRole="EstadosFinancieros" />
         </EntityType>
-        <Association Name="FK__EstadosFi__Empre__267ABA7A">
+        <Association Name="FK__EstadosFi__Empre__276EDEB3">
           <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
           <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="*" />
           <ReferentialConstraint>
@@ -154,7 +254,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Indicador__Estad__29572725">
+        <Association Name="FK__Indicador__Estad__2A4B4B5E">
           <End Role="EstadosFinancieros" Type="Self.EstadosFinancieros" Multiplicity="1" />
           <End Role="IndicadoresCalculados" Type="Self.IndicadoresCalculados" Multiplicity="*" />
           <ReferentialConstraint>
@@ -166,33 +266,132 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="dbFinanzasEmpresasEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="dbFinanzasEmpresaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Empresas" EntityType="Self.Empresas" />
           <EntitySet Name="EstadosFinancieros" EntityType="Self.EstadosFinancieros" />
           <EntitySet Name="IndicadoresCalculados" EntityType="Self.IndicadoresCalculados" />
-          <AssociationSet Name="FK__EstadosFi__Empre__267ABA7A" Association="Self.FK__EstadosFi__Empre__267ABA7A">
+          <AssociationSet Name="FK__EstadosFi__Empre__276EDEB3" Association="Self.FK__EstadosFi__Empre__276EDEB3">
             <End Role="Empresas" EntitySet="Empresas" />
             <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
           </AssociationSet>
-          <AssociationSet Name="FK__Indicador__Estad__29572725" Association="Self.FK__Indicador__Estad__29572725">
+          <AssociationSet Name="FK__Indicador__Estad__2A4B4B5E" Association="Self.FK__Indicador__Estad__2A4B4B5E">
             <End Role="EstadosFinancieros" EntitySet="EstadosFinancieros" />
             <End Role="IndicadoresCalculados" EntitySet="IndicadoresCalculados" />
           </AssociationSet>
           <FunctionImport Name="CalcularIndicadores" />
+          <EntitySet Name="CargasArchivos" EntityType="FinanzasEmpresasModel.CargasArchivos" />
+          <AssociationSet Name="FK__CargasArc__Empre__2F10007B" Association="FinanzasEmpresasModel.FK__CargasArc__Empre__2F10007B">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="CargasArchivos" EntitySet="CargasArchivos" />
+          </AssociationSet>
+          <EntitySet Name="Indicadores" EntityType="FinanzasEmpresasModel.Indicadores" />
+          <AssociationSet Name="FK__Indicador__Empre__33D4B598" Association="FinanzasEmpresasModel.FK__Indicador__Empre__33D4B598">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Indicadores" EntitySet="Indicadores" />
+          </AssociationSet>
+          <EntitySet Name="Cuentas" EntityType="FinanzasEmpresasModel.Cuentas" />
+          <AssociationSet Name="FK__Cuentas__Empresa__3A81B327" Association="FinanzasEmpresasModel.FK__Cuentas__Empresa__3A81B327">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Cuentas" EntitySet="Cuentas" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="CargasArchivos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" />
+          <Property Name="NombreArchivo" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RutaArchivo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FechaCarga" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TipoArchivo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Procesado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Empresas" Relationship="FinanzasEmpresasModel.FK__CargasArc__Empre__2F10007B" FromRole="CargasArchivos" ToRole="Empresas" />
+        </EntityType>
+        <Association Name="FK__CargasArc__Empre__2F10007B">
+          <End Type="FinanzasEmpresasModel.Empresas" Role="Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FinanzasEmpresasModel.CargasArchivos" Role="CargasArchivos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="CargasArchivos">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Indicadores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Formula" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Valor" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="Periodo" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Empresas" Relationship="FinanzasEmpresasModel.FK__Indicador__Empre__33D4B598" FromRole="Indicadores" ToRole="Empresas" />
+        </EntityType>
+        <Association Name="FK__Indicador__Empre__33D4B598">
+          <End Type="FinanzasEmpresasModel.Empresas" Role="Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FinanzasEmpresasModel.Indicadores" Role="Indicadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="Indicadores">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Cuentas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" />
+          <Property Name="Numero" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Activa" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Empresas" Relationship="FinanzasEmpresasModel.FK__Cuentas__Empresa__3A81B327" FromRole="Cuentas" ToRole="Empresas" />
+        </EntityType>
+        <Association Name="FK__Cuentas__Empresa__3A81B327">
+          <End Type="FinanzasEmpresasModel.Empresas" Role="Empresas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FinanzasEmpresasModel.Cuentas" Role="Cuentas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="EmpresaId" />
+            </Principal>
+            <Dependent Role="Cuentas">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="FinanzasEmpresasModelStoreContainer" CdmEntityContainer="dbFinanzasEmpresasEntities">
+        <EntityContainerMapping StorageEntityContainer="FinanzasEmpresasModelStoreContainer" CdmEntityContainer="dbFinanzasEmpresaEntities">
           <EntitySetMapping Name="Empresas">
             <EntityTypeMapping TypeName="FinanzasEmpresasModel.Empresas">
               <MappingFragment StoreEntitySet="Empresas">
                 <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
                 <ScalarProperty Name="NombreEmpresa" ColumnName="NombreEmpresa" />
                 <ScalarProperty Name="NIT" ColumnName="NIT" />
-                <ScalarProperty Name="Sector" ColumnName="Sector" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -235,6 +434,46 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CalcularIndicadores" FunctionName="FinanzasEmpresasModel.Store.CalcularIndicadores" />
+          <EntitySetMapping Name="CargasArchivos">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.CargasArchivos">
+              <MappingFragment StoreEntitySet="CargasArchivos">
+                <ScalarProperty Name="Procesado" ColumnName="Procesado" />
+                <ScalarProperty Name="TipoArchivo" ColumnName="TipoArchivo" />
+                <ScalarProperty Name="FechaCarga" ColumnName="FechaCarga" />
+                <ScalarProperty Name="RutaArchivo" ColumnName="RutaArchivo" />
+                <ScalarProperty Name="NombreArchivo" ColumnName="NombreArchivo" />
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Indicadores">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.Indicadores">
+              <MappingFragment StoreEntitySet="Indicadores">
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Formula" ColumnName="Formula" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cuentas">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.Cuentas">
+              <MappingFragment StoreEntitySet="Cuentas">
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

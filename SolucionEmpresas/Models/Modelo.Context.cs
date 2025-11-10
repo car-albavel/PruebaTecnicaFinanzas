@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SolucionEmpresas
+namespace SolucionEmpresas.Models
 {
     using System;
     using System.Data.Entity;
@@ -15,10 +15,10 @@ namespace SolucionEmpresas
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class dbFinanzasEmpresasEntities : DbContext
+    public partial class dbFinanzasEmpresaEntities : DbContext
     {
-        public dbFinanzasEmpresasEntities()
-            : base("name=dbFinanzasEmpresasEntities")
+        public dbFinanzasEmpresaEntities()
+            : base("name=dbFinanzasEmpresaEntities")
         {
         }
     
@@ -27,9 +27,12 @@ namespace SolucionEmpresas
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Models.Empresas> Empresas { get; set; }
-        public virtual DbSet<Models.EstadosFinancieros> EstadosFinancieros { get; set; }
-        public virtual DbSet<Models.IndicadoresCalculados> IndicadoresCalculados { get; set; }
+        public virtual DbSet<Empresas> Empresas { get; set; }
+        public virtual DbSet<EstadosFinancieros> EstadosFinancieros { get; set; }
+        public virtual DbSet<IndicadoresCalculados> IndicadoresCalculados { get; set; }
+        public virtual DbSet<CargasArchivos> CargasArchivos { get; set; }
+        public virtual DbSet<Indicadores> Indicadores { get; set; }
+        public virtual DbSet<Cuentas> Cuentas { get; set; }
     
         public virtual int CalcularIndicadores()
         {

@@ -129,14 +129,27 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CargasController.cs" />
+    <Compile Include="Controllers\CuentasController.cs" />
+    <Compile Include="Controllers\EmpresasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IndicadoresController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CargasArchivos.cs">
+      <DependentUpon>Modelo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cuentas.cs">
+      <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Empresas.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EstadosFinancieros.cs">
+      <DependentUpon>Modelo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Indicadores.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IndicadoresCalculados.cs">
@@ -212,9 +225,14 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Empresas\Index.cshtml" />
+    <Content Include="Views\Empresas\Create.cshtml" />
+    <Content Include="Views\Cargas\Index.cshtml" />
+    <Content Include="Views\Cargas\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\Entidades\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

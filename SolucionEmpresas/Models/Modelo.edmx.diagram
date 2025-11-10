@@ -4,12 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d9ccbcc030e64e069778ad67c3171986" Name="Diagram1">
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.Empresas" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+      <Diagram DiagramId="b471a1eeb87d4b0d877fa96e3ea17b11" Name="Diagram1">
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Empresas" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="FinanzasEmpresasModel.EstadosFinancieros" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="FinanzasEmpresasModel.IndicadoresCalculados" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__EstadosFi__Empre__267ABA7A" ManuallyRouted="false" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Estad__29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__EstadosFi__Empre__276EDEB3" ManuallyRouted="false" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Estad__2A4B4B5E" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.CargasArchivos" Width="1.5" PointX="3" PointY="5.875" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__CargasArc__Empre__2F10007B" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Indicadores" Width="1.5" PointX="3" PointY="9.75" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Empre__33D4B598" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Cuentas" Width="1.5" PointX="3" PointY="14.125" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__Cuentas__Empresa__3A81B327" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

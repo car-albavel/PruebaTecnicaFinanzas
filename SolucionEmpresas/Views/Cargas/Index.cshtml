@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SolucionEmpresas.Models.CargasArchivos>
+
+@{
+    ViewBag.Title = "Carga de Archivos Contables";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@ViewBag.Title</h1>
+            <hr />
+
+            <div class="mb-3">
+                @Html.ActionLink("Cargar Nuevo Archivo", "Create", null, new { @class = "btn btn-primary" })
+            </div>
+
+            @if (TempData["Mensaje"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Mensaje"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre Archivo</th>
+                        <th>Tipo</th>
+                        <th>Empresa</th>
+                        <th>Fecha Carga</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NombreArchivo</td>
+                            <td><span class="badge bg-info">@item.TipoArchivo</span></td>
+                            <td>@item.Empresas.NombreEmpresa</td>
+                            <td>@item.FechaCarga.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (item.Procesado)
+                                {
+                                    <span class="badge bg-success">Procesado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Pendiente</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('¿Está seguro?')" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
