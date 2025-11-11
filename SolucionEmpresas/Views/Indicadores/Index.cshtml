@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SolucionEmpresas.Models.Indicadores>
+
+@{
+    ViewBag.Title = "Consulta de Indicadores";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@ViewBag.Title</h1>
+            <hr />
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    @using (Html.BeginForm("Index", "Indicadores", FormMethod.Get))
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    @Html.DropDownListFor(m => m.FirstOrDefault().EmpresaId, (SelectList)ViewBag.Empresas, "-- Todas --", new { @class = "form-control", @name = "empresaId" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Año</label>
+                                    <input type="number" name="anio" class="form-control" value="@ViewBag.Anio" placeholder="Ej: 2024" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Mes</label>
+                                    <select name="mes" class="form-control">
+                                        <option value="">-- Todos --</option>
+                                        <option value="1" @(ViewBag.Mes == 1 ? "selected" : "")>Enero</option>
+                                        <option value="2" @(ViewBag.Mes == 2 ? "selected" : "")>Febrero</option>
+                                        <option value="3" @(ViewBag.Mes == 3 ? "selected" : "")>Marzo</option>
+                                        <option value="4" @(ViewBag.Mes == 4 ? "selected" : "")>Abril</option>
+                                        <option value="5" @(ViewBag.Mes == 5 ? "selected" : "")>Mayo</option>
+                                        <option value="6" @(ViewBag.Mes == 6 ? "selected" : "")>Junio</option>
+                                        <option value="7" @(ViewBag.Mes == 7 ? "selected" : "")>Julio</option>
+                                        <option value="8" @(ViewBag.Mes == 8 ? "selected" : "")>Agosto</option>
+                                        <option value="9" @(ViewBag.Mes == 9 ? "selected" : "")>Septiembre</option>
+                                        <option value="10" @(ViewBag.Mes == 10 ? "selected" : "")>Octubre</option>
+                                        <option value="11" @(ViewBag.Mes == 11 ? "selected" : "")>Noviembre</option>
+                                        <option value="12" @(ViewBag.Mes == 12 ? "selected" : "")>Diciembre</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                    }
+                </div>
+            </div>
+
+            @Html.ActionLink("Crear Nuevo Indicador", "Create", null, new { @class = "btn btn-success mb-3" })
+
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Fórmula</th>
+                        <th>Valor</th>
+                        <th>Período</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Descripcion</td>
+                            <td><code>@item.Formula</code></td>
+                            <td>@item.Valor.ToString("N2")</td>
+                            <td>@item.Periodo.ToString("MM/yyyy")</td>
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

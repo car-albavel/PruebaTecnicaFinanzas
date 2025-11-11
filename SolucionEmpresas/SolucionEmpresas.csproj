@@ -229,6 +229,10 @@
     <Content Include="Views\Empresas\Create.cshtml" />
     <Content Include="Views\Cargas\Index.cshtml" />
     <Content Include="Views\Cargas\Create.cshtml" />
+    <Content Include="Views\Cuentas\Index.cshtml" />
+    <Content Include="Views\Cuentas\Create.cshtml" />
+    <Content Include="Views\Indicadores\Index.cshtml" />
+    <Content Include="Views\Indicadores\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
