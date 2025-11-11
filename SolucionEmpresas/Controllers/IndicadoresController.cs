@@ -30,7 +30,7 @@ namespace TuAplicacion.Controllers
                 indicadores = indicadores.Where(i => i.Periodo.Month == mes);
             }
 
-            ViewBag.Empresas = new SelectList(db.Empresas.Where(e => e.Estado), "Id", "Nombre", empresaId);
+            ViewBag.Empresas = new SelectList(db.Empresas.Where(e => e.Estado), "EmpresaId", "NombreEmpresa", empresaId);
             ViewBag.EmpresaId = empresaId;
             ViewBag.Anio = anio;
             ViewBag.Mes = mes;

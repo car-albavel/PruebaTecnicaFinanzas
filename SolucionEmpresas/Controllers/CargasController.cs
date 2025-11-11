@@ -33,7 +33,7 @@ namespace SolucionEmpresas.Controllers
         public ActionResult Create(int? empresaId)
         {
             var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", empresaId);
+            ViewBag.Empresas = new SelectList(empresas, "EmpresaId", "NombreEmpresa", empresaId);
             return View();
         }
 
@@ -65,6 +65,10 @@ namespace SolucionEmpresas.Controllers
                     string nombreArchivo = Guid.NewGuid().ToString() + extension;
                     string rutaCompleta = Path.Combine(rutaArchivos, nombreArchivo);
 
+                    Datos.DatosContables datosContables = new Datos.DatosContables();
+                    RecursosExcel.ProcesarExcel procesarExcel = new RecursosExcel.ProcesarExcel();
+
+
                     archivo.SaveAs(rutaCompleta);
 
                     var carga = new CargasArchivos
@@ -76,6 +80,8 @@ namespace SolucionEmpresas.Controllers
                         TipoArchivo = extension.Replace(".", "").ToUpper(),
                         Procesado = false
                     };
+
+                    var datos = procesarExcel.LeerArchivoExcel(rutaCompleta);
 
                     CargasArchivos cargasArchivos = db.CargasArchivos.Add(carga);
                     db.SaveChanges();
