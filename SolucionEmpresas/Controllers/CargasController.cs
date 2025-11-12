@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -65,7 +66,6 @@ namespace SolucionEmpresas.Controllers
                     string nombreArchivo = Guid.NewGuid().ToString() + extension;
                     string rutaCompleta = Path.Combine(rutaArchivos, nombreArchivo);
 
-                    Datos.DatosContables datosContables = new Datos.DatosContables();
                     RecursosExcel.ProcesarExcel procesarExcel = new RecursosExcel.ProcesarExcel();
 
 
@@ -82,6 +82,13 @@ namespace SolucionEmpresas.Controllers
                     };
 
                     var datos = procesarExcel.LeerArchivoExcel(rutaCompleta);
+
+                    foreach(Datos.DatosContables datos1 in datos)
+                    {
+                        // Ejecutar el stored procedure
+                        int resultado = this.db.SP_InsertarDatosEstadosFinancieros(datos1.EmpresaId, datos1.Fecha, datos1.Periodo, datos1.ActivoCorriente, datos1.PasivoCorriente,
+                            datos1.ActivoTotal, datos1.PasivoTotal, datos1.Patrimonio, datos1.IngresosOperacionales, datos1.UtilidadBruta, datos1.UtilidadOperativa, datos1.UtilidadNeta);
+                    }
 
                     CargasArchivos cargasArchivos = db.CargasArchivos.Add(carga);
                     db.SaveChanges();

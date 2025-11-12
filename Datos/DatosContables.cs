@@ -8,14 +8,21 @@ namespace Datos
 {
     public class DatosContables
     {
-        public string NIT { get; set; }
-        public string NumeroCuenta { get; set; }
-        public string NombreCuenta { get; set; }
-        public decimal SaldoInicial { get; set; }
-        public decimal Debitos { get; set; }
-        public decimal Creditos { get; set; }
-        public decimal SaldoFinal { get; set; }
+
+        public int EmpresaId { get; set; }
         public DateTime Periodo { get; set; }
-        
+        public DateTime Fecha { get; set; }
+        public DateTime FechaCargue { get; set; }
+        public bool Activa { get; set; }
+        public decimal ActivoCorriente { get; set; }
+        public decimal PasivoCorriente { get; set; }
+        public decimal ActivoTotal { get; set; }
+        public decimal PasivoTotal { get; set; }
+        public decimal Patrimonio { get; set; }
+        public decimal IngresosOperacionales { get; set; }
+        public decimal UtilidadBruta { get; set; }
+        public decimal UtilidadOperativa { get; set; }
+        public decimal UtilidadNeta { get; set; }
+
     }
 }

@@ -37,5 +37,58 @@ namespace SolucionEmpresas.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CalcularIndicadores");
         }
+    
+        public virtual int SP_InsertarDatosEstadosFinancieros(Nullable<int> empresaId, Nullable<System.DateTime> fecha, Nullable<System.DateTime> periodo, Nullable<decimal> activoCorriente, Nullable<decimal> pasivoCorriente, Nullable<decimal> activoTotal, Nullable<decimal> pasivoTotal, Nullable<decimal> patrimonio, Nullable<decimal> ingresosOperacionales, Nullable<decimal> utilidadBruta, Nullable<decimal> utilidadOperativa, Nullable<decimal> utilidadNeta)
+        {
+            var empresaIdParameter = empresaId.HasValue ?
+                new ObjectParameter("EmpresaId", empresaId) :
+                new ObjectParameter("EmpresaId", typeof(int));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var periodoParameter = periodo.HasValue ?
+                new ObjectParameter("Periodo", periodo) :
+                new ObjectParameter("Periodo", typeof(System.DateTime));
+    
+            var activoCorrienteParameter = activoCorriente.HasValue ?
+                new ObjectParameter("ActivoCorriente", activoCorriente) :
+                new ObjectParameter("ActivoCorriente", typeof(decimal));
+    
+            var pasivoCorrienteParameter = pasivoCorriente.HasValue ?
+                new ObjectParameter("PasivoCorriente", pasivoCorriente) :
+                new ObjectParameter("PasivoCorriente", typeof(decimal));
+    
+            var activoTotalParameter = activoTotal.HasValue ?
+                new ObjectParameter("ActivoTotal", activoTotal) :
+                new ObjectParameter("ActivoTotal", typeof(decimal));
+    
+            var pasivoTotalParameter = pasivoTotal.HasValue ?
+                new ObjectParameter("PasivoTotal", pasivoTotal) :
+                new ObjectParameter("PasivoTotal", typeof(decimal));
+    
+            var patrimonioParameter = patrimonio.HasValue ?
+                new ObjectParameter("Patrimonio", patrimonio) :
+                new ObjectParameter("Patrimonio", typeof(decimal));
+    
+            var ingresosOperacionalesParameter = ingresosOperacionales.HasValue ?
+                new ObjectParameter("IngresosOperacionales", ingresosOperacionales) :
+                new ObjectParameter("IngresosOperacionales", typeof(decimal));
+    
+            var utilidadBrutaParameter = utilidadBruta.HasValue ?
+                new ObjectParameter("UtilidadBruta", utilidadBruta) :
+                new ObjectParameter("UtilidadBruta", typeof(decimal));
+    
+            var utilidadOperativaParameter = utilidadOperativa.HasValue ?
+                new ObjectParameter("UtilidadOperativa", utilidadOperativa) :
+                new ObjectParameter("UtilidadOperativa", typeof(decimal));
+    
+            var utilidadNetaParameter = utilidadNeta.HasValue ?
+                new ObjectParameter("UtilidadNeta", utilidadNeta) :
+                new ObjectParameter("UtilidadNeta", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertarDatosEstadosFinancieros", empresaIdParameter, fechaParameter, periodoParameter, activoCorrienteParameter, pasivoCorrienteParameter, activoTotalParameter, pasivoTotalParameter, patrimonioParameter, ingresosOperacionalesParameter, utilidadBrutaParameter, utilidadOperativaParameter, utilidadNetaParameter);
+        }
     }
 }

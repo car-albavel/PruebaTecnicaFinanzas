@@ -128,6 +128,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="SP_InsertarDatosEstadosFinancieros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpresaId" Type="int" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="Periodo" Type="date" Mode="In" />
+          <Parameter Name="ActivoCorriente" Type="decimal" Mode="In" />
+          <Parameter Name="PasivoCorriente" Type="decimal" Mode="In" />
+          <Parameter Name="ActivoTotal" Type="decimal" Mode="In" />
+          <Parameter Name="PasivoTotal" Type="decimal" Mode="In" />
+          <Parameter Name="Patrimonio" Type="decimal" Mode="In" />
+          <Parameter Name="IngresosOperacionales" Type="decimal" Mode="In" />
+          <Parameter Name="UtilidadBruta" Type="decimal" Mode="In" />
+          <Parameter Name="UtilidadOperativa" Type="decimal" Mode="In" />
+          <Parameter Name="UtilidadNeta" Type="decimal" Mode="In" />
+        </Function>
         <EntityContainer Name="FinanzasEmpresasModelStoreContainer">
           <EntitySet Name="CargasArchivos" EntityType="Self.CargasArchivos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="dbo" store:Type="Tables" />
@@ -178,6 +192,20 @@
             <End Role="Empresas" EntitySet="Empresas" />
             <End Role="Indicadores" EntitySet="Indicadores" />
           </AssociationSet>
+          <FunctionImport Name="SP_InsertarDatosEstadosFinancieros">
+            <Parameter Name="EmpresaId" Mode="In" Type="Int32" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Periodo" Mode="In" Type="DateTime" />
+            <Parameter Name="ActivoCorriente" Mode="In" Type="Decimal" />
+            <Parameter Name="PasivoCorriente" Mode="In" Type="Decimal" />
+            <Parameter Name="ActivoTotal" Mode="In" Type="Decimal" />
+            <Parameter Name="PasivoTotal" Mode="In" Type="Decimal" />
+            <Parameter Name="Patrimonio" Mode="In" Type="Decimal" />
+            <Parameter Name="IngresosOperacionales" Mode="In" Type="Decimal" />
+            <Parameter Name="UtilidadBruta" Mode="In" Type="Decimal" />
+            <Parameter Name="UtilidadOperativa" Mode="In" Type="Decimal" />
+            <Parameter Name="UtilidadNeta" Mode="In" Type="Decimal" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="CargasArchivos">
           <Key>
@@ -390,6 +418,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_InsertarDatosEstadosFinancieros" FunctionName="FinanzasEmpresasModel.Store.SP_InsertarDatosEstadosFinancieros" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

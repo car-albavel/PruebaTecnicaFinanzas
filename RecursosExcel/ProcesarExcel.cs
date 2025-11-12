@@ -27,18 +27,24 @@ namespace RecursosExcel
                         continue;
 
 
+                    var dato2 = DateTime.Parse(worksheet.Cell($"C{row}").Value.ToString());
+
                     try
                     {
                         var dato = new Datos.DatosContables
                         {
-                            NIT = worksheet.Cell($"A{row}").Value.ToString() ?? "",
-                            NumeroCuenta = worksheet.Cell($"B{row}").Value.ToString() ?? "",
-                            NombreCuenta = worksheet.Cell($"C{row}").Value.ToString() ?? "",
-                            SaldoInicial = Convert.ToDecimal(worksheet.Cell($"D{row}").Value.ToString()),
-                            Debitos = Convert.ToDecimal(worksheet.Cell($"E{row}").Value.ToString()),
-                            Creditos = Convert.ToDecimal(worksheet.Cell($"F{row}").Value.ToString()),
-                            SaldoFinal = Convert.ToDecimal(worksheet.Cell($"G{row}").Value.ToString()),
-                            Periodo = DateTime.Parse(worksheet.Cell($"H{row}").Value.ToString())
+                            EmpresaId = Convert.ToInt32(worksheet.Cell($"A{row}").Value.ToString()),
+                            Periodo = DateTime.Parse(worksheet.Cell($"B{row}").Value.ToString()),
+                            Fecha = DateTime.Parse(worksheet.Cell($"C{row}").Value.ToString()),
+                            ActivoCorriente = Convert.ToDecimal(worksheet.Cell($"D{row}").Value.ToString()),
+                            PasivoCorriente = Convert.ToDecimal(worksheet.Cell($"E{row}").Value.ToString()),
+                            ActivoTotal = Convert.ToDecimal(worksheet.Cell($"F{row}").Value.ToString()),
+                            PasivoTotal = Convert.ToDecimal(worksheet.Cell($"G{row}").Value.ToString()),
+                            Patrimonio = Convert.ToDecimal(worksheet.Cell($"H{row}").Value.ToString()),
+                            IngresosOperacionales = Convert.ToDecimal(worksheet.Cell($"I{row}").Value.ToString()),
+                            UtilidadBruta = Convert.ToDecimal(worksheet.Cell($"J{row}").Value.ToString()),
+                            UtilidadOperativa = Convert.ToDecimal(worksheet.Cell($"K{row}").Value.ToString()),
+                            UtilidadNeta = Convert.ToDecimal(worksheet.Cell($"L{row}").Value.ToString()),
                         };
 
                         datos.Add(dato);
