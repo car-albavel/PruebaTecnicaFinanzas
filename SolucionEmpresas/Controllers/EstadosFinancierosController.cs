@@ -50,7 +50,7 @@ namespace TuAplicacion.Controllers
         public ActionResult Create(int? empresaId)
         {
             var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", empresaId);
+            ViewBag.Empresas = new SelectList(empresas, "EmpresaId", "NombreEmpresa", empresaId);
 
             var modelo = new EstadosFinancieros
             {
@@ -79,7 +79,7 @@ namespace TuAplicacion.Controllers
             }
 
             var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", estado.EmpresaId);
+            ViewBag.Empresas = new SelectList(empresas, "EmpresaId", "NombreEmpresa", estado.EmpresaId);
             return View(estado);
         }
 
@@ -98,7 +98,7 @@ namespace TuAplicacion.Controllers
             }
 
             var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", estado.EmpresaId);
+            ViewBag.Empresas = new SelectList(empresas, "EmpresaId", "NombreEmpresa", estado.EmpresaId);
 
             return View(estado);
         }
@@ -134,7 +134,7 @@ namespace TuAplicacion.Controllers
             }
 
             var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", estado.EmpresaId);
+            ViewBag.Empresas = new SelectList(empresas, "EmpresaId", "NombreEmpresa", estado.EmpresaId);
             return View(estado);
         }
 
