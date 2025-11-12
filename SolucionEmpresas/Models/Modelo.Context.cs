@@ -27,12 +27,11 @@ namespace SolucionEmpresas.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CargasArchivos> CargasArchivos { get; set; }
+        public virtual DbSet<Cuentas> Cuentas { get; set; }
         public virtual DbSet<Empresas> Empresas { get; set; }
         public virtual DbSet<EstadosFinancieros> EstadosFinancieros { get; set; }
-        public virtual DbSet<IndicadoresCalculados> IndicadoresCalculados { get; set; }
-        public virtual DbSet<CargasArchivos> CargasArchivos { get; set; }
         public virtual DbSet<Indicadores> Indicadores { get; set; }
-        public virtual DbSet<Cuentas> Cuentas { get; set; }
     
         public virtual int CalcularIndicadores()
         {

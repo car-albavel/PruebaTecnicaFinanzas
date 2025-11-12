@@ -132,6 +132,7 @@
     <Compile Include="Controllers\CargasController.cs" />
     <Compile Include="Controllers\CuentasController.cs" />
     <Compile Include="Controllers\EmpresasController.cs" />
+    <Compile Include="Controllers\EstadosFinancierosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndicadoresController.cs" />
     <Compile Include="Global.asax.cs">
@@ -150,9 +151,6 @@
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Indicadores.cs">
-      <DependentUpon>Modelo.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IndicadoresCalculados.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Modelo.Context.cs">
@@ -233,6 +231,7 @@
     <Content Include="Views\Cuentas\Create.cshtml" />
     <Content Include="Views\Indicadores\Index.cshtml" />
     <Content Include="Views\Indicadores\Create.cshtml" />
+    <Content Include="Views\EstadosFinancieros\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

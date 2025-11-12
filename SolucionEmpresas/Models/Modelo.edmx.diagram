@@ -5,17 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b471a1eeb87d4b0d877fa96e3ea17b11" Name="Diagram1">
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.Empresas" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.EstadosFinancieros" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.IndicadoresCalculados" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__EstadosFi__Empre__276EDEB3" ManuallyRouted="false" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Estad__2A4B4B5E" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.CargasArchivos" Width="1.5" PointX="3" PointY="5.875" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__CargasArc__Empre__2F10007B" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.Indicadores" Width="1.5" PointX="3" PointY="9.75" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Empre__33D4B598" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.Cuentas" Width="1.5" PointX="3" PointY="14.125" />
-        <AssociationConnector Association="FinanzasEmpresasModel.FK__Cuentas__Empresa__3A81B327" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.CargasArchivos" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Cuentas" Width="1.5" PointX="3" PointY="13.375" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Empresas" Width="1.5" PointX="0.75" PointY="7.125" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.EstadosFinancieros" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.Indicadores" Width="1.5" PointX="3" PointY="1.5" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__CargasArc__Empre__2C3393D0" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__Cuentas__Empresa__37A5467C" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__EstadosFi__Empre__286302EC" />
+        <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Empre__30F848ED" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

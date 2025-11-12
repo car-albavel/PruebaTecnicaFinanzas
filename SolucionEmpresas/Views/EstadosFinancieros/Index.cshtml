@@ -1,0 +1,170 @@
+﻿@model IEnumerable<SolucionEmpresas.Models.EstadosFinancieros>
+
+@{
+    ViewBag.Title = "Estados Financieros";
+}
+
+<div class="container-fluid" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@ViewBag.Title</h1>
+            <hr />
+
+            <!-- Filtro por Empresa -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @using (Html.BeginForm("Index", "EstadosFinancieros", FormMethod.Get))
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Filtrar por Empresa:</label>
+                                <select name="empresaId" class="form-control">
+                                    <option value="">-- Todas las Empresas --</option>
+                                    @if (ViewBag.Empresas != null)
+                                    {
+                                        foreach (var empresa in (SelectList)ViewBag.Empresas)
+                                        {
+                                            <option value="@empresa.Value" @(empresa.Value.ToString() == ViewBag.EmpresaId?.ToString() ? "selected" : "")>
+                                                @empresa.Text
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Filtrar</button>
+                                <a href="@Url.Action("Index")" class="btn btn-default" style="margin-top: 25px;">Limpiar</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (TempData["Mensaje"] != null)
+            {
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    ✅ @TempData["Mensaje"]
+                </div>
+            }
+
+            <div class="btn-group mb-3" role="group">
+                @Html.ActionLink("➕ Crear Nuevo Estado Financiero", "Create", null, new { @class = "btn btn-success" })
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="info">
+                            <th>Empresa</th>
+                            <th>Período</th>
+                            <th>Fecha Estado</th>
+                            <th>Activo Total</th>
+                            <th>Pasivo Total</th>
+                            <th>Patrimonio</th>
+                            <th>Utilidad Neta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.EmpresaId</td>
+                                <td>@item.Periodo.ToString("yyyy-MM")</td>
+                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>$ @item.ActivoTotal.ToString()</td>
+                                <td>$ @item.PasivoTotal.ToString()</td>
+                                <td>$ @item.Patrimonio.ToString()</td>
+                                <td>$ @item.UtilidadNeta.ToString()</td>
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <!-- ✅ CHECKBOX CORREGIDO -->
+                                            <input type="checkbox"
+                                                   class="checkbox-activo"
+                                                   id="estado_@item.EstadoId"
+                                                   data-estado-id="@item.EstadoId"
+                                                   @(item.Activa ? "checked='checked'" : "") />
+                                            <span id="label_@item.EstadoId">
+                                                @(item.Activa ? "Activo" : "Inactivo")
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.ActionLink("✏️", "Edit", new { id = item.EstadoId }, new { @class = "btn btn-warning btn-xs", title = "Editar" })
+                                    @Html.ActionLink("👁️", "Details", new { id = item.EstadoId }, new { @class = "btn btn-info btn-xs", title = "Ver" })
+                                    @Html.ActionLink("🗑️", "Delete", new { id = item.EstadoId }, new { @class = "btn btn-danger btn-xs", title = "Eliminar", onclick = "return confirm('¿Está seguro?')" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.Count() == 0)
+            {
+                <div class="alert alert-info">
+                    No hay estados financieros registrados.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+    $(function() {
+        console.log("=== Script de EstadosFinancieros cargado ===");
+        console.log("jQuery versión: " + jQuery.fn.jquery);
+
+        // ✅ Evento para cambio de checkbox
+        $(document).on('change', '.checkbox-activo', function() {
+            var $checkbox = $(this);
+            var estadoId = $checkbox.data('estado-id');
+            var isChecked = $checkbox.is(':checked');
+
+            console.log("✓ Checkbox cambió - ID: " + estadoId + ", Checked: " + isChecked);
+
+            // Deshabilitar checkbox mientras se envía
+            $checkbox.prop('disabled', true);
+
+            $.ajax({
+                url: '@Url.Action("ActualizarEstado", "EstadosFinancieros")',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    id: estadoId,
+                    activo: isChecked
+                },
+                success: function(response) {
+                    console.log("✓ Respuesta exitosa:", response);
+
+                    if (response.success) {
+                        $('#label_' + estadoId).text(isChecked ? 'Activo' : 'Inactivo');
+                        alert('✅ ' + response.message);
+                    } else {
+                        alert('❌ Error: ' + response.message);
+                        $checkbox.prop('checked', !isChecked);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("❌ Error AJAX:");
+                    console.error("Status: " + status);
+                    console.error("Error: " + error);
+                    console.error("Response: " + xhr.responseText);
+
+                    alert('❌ Error al actualizar el estado. Revisa la consola (F12)');
+                    $checkbox.prop('checked', !isChecked);
+                },
+                complete: function() {
+                    // Habilitar checkbox nuevamente
+                    $checkbox.prop('disabled', false);
+                }
+            });
+        });
+    });
+    </script>
+}

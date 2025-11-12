@@ -14,17 +14,12 @@ namespace SolucionEmpresas.Models
     
     public partial class EstadosFinancieros
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public EstadosFinancieros()
-        {
-            this.IndicadoresCalculados = new HashSet<IndicadoresCalculados>();
-        }
-    
         public int EstadoId { get; set; }
         public int EmpresaId { get; set; }
         public System.DateTime Periodo { get; set; }
         public System.DateTime Fecha { get; set; }
         public System.DateTime FechaCargue { get; set; }
+        public bool Activa { get; set; }
         public Nullable<decimal> ActivoCorriente { get; set; }
         public Nullable<decimal> PasivoCorriente { get; set; }
         public Nullable<decimal> ActivoTotal { get; set; }
@@ -36,7 +31,5 @@ namespace SolucionEmpresas.Models
         public Nullable<decimal> UtilidadNeta { get; set; }
     
         public virtual Empresas Empresas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndicadoresCalculados> IndicadoresCalculados { get; set; }
     }
 }

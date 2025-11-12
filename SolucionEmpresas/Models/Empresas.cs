@@ -17,10 +17,10 @@ namespace SolucionEmpresas.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Empresas()
         {
-            this.EstadosFinancieros = new HashSet<EstadosFinancieros>();
             this.CargasArchivos = new HashSet<CargasArchivos>();
-            this.Indicadores = new HashSet<Indicadores>();
             this.Cuentas = new HashSet<Cuentas>();
+            this.EstadosFinancieros = new HashSet<EstadosFinancieros>();
+            this.Indicadores = new HashSet<Indicadores>();
         }
     
         public int EmpresaId { get; set; }
@@ -32,12 +32,12 @@ namespace SolucionEmpresas.Models
         public System.DateTime FechaCreacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EstadosFinancieros> EstadosFinancieros { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CargasArchivos> CargasArchivos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Indicadores> Indicadores { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cuentas> Cuentas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EstadosFinancieros> EstadosFinancieros { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Indicadores> Indicadores { get; set; }
     }
 }
