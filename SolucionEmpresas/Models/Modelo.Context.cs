@@ -32,6 +32,8 @@ namespace SolucionEmpresas.Models
         public virtual DbSet<Empresas> Empresas { get; set; }
         public virtual DbSet<EstadosFinancieros> EstadosFinancieros { get; set; }
         public virtual DbSet<Indicadores> Indicadores { get; set; }
+        public virtual DbSet<ConfigurarIndicadores> ConfigurarIndicadores { get; set; }
+        public virtual DbSet<IndicadoresCalculados> IndicadoresCalculados { get; set; }
     
         public virtual int CalcularIndicadores()
         {
@@ -89,6 +91,20 @@ namespace SolucionEmpresas.Models
                 new ObjectParameter("UtilidadNeta", typeof(decimal));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertarDatosEstadosFinancieros", empresaIdParameter, fechaParameter, periodoParameter, activoCorrienteParameter, pasivoCorrienteParameter, activoTotalParameter, pasivoTotalParameter, patrimonioParameter, ingresosOperacionalesParameter, utilidadBrutaParameter, utilidadOperativaParameter, utilidadNetaParameter);
+        }
+    
+        public virtual int ActualizarIndicador1(string valorFormula)
+        {
+            var valorFormulaParameter = valorFormula != null ?
+                new ObjectParameter("ValorFormula", valorFormula) :
+                new ObjectParameter("ValorFormula", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarIndicador1", valorFormulaParameter);
+        }
+    
+        public virtual int ObtenerIndicadoresActivosConNombre()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ObtenerIndicadoresActivosConNombre");
         }
     }
 }

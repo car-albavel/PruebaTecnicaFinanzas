@@ -17,6 +17,17 @@
           <Property Name="TipoArchivo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Procesado" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="ConfigurarIndicadores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Indicador" Type="varchar" MaxLength="50" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="NombreIndicador" Type="varchar" MaxLength="100" />
+          <Property Name="Formula" Type="varchar" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="Cuentas">
           <Key>
             <PropertyRef Name="Id" />
@@ -74,6 +85,18 @@
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="IndicadoresCalculados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CuentaId" Type="int" />
+          <Property Name="Indicador1" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador2" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador3" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador4" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador5" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
         <Association Name="FK__CargasArc__Empre__2C3393D0">
           <End Role="Empresas" Type="Self.Empresas" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -128,6 +151,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ActualizarIndicador1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ValorFormula" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="ObtenerIndicadoresActivosConNombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_InsertarDatosEstadosFinancieros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmpresaId" Type="int" Mode="In" />
           <Parameter Name="Fecha" Type="date" Mode="In" />
@@ -144,10 +171,12 @@
         </Function>
         <EntityContainer Name="FinanzasEmpresasModelStoreContainer">
           <EntitySet Name="CargasArchivos" EntityType="Self.CargasArchivos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigurarIndicadores" EntityType="Self.ConfigurarIndicadores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cuentas" EntityType="Self.Cuentas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Empresas" EntityType="Self.Empresas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadosFinancieros" EntityType="Self.EstadosFinancieros" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Indicadores" EntityType="Self.Indicadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndicadoresCalculados" EntityType="Self.IndicadoresCalculados" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CargasArc__Empre__2C3393D0" Association="Self.FK__CargasArc__Empre__2C3393D0">
             <End Role="Empresas" EntitySet="Empresas" />
             <End Role="CargasArchivos" EntitySet="CargasArchivos" />
@@ -206,6 +235,12 @@
             <Parameter Name="UtilidadOperativa" Mode="In" Type="Decimal" />
             <Parameter Name="UtilidadNeta" Mode="In" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="ConfigurarIndicadores" EntityType="FinanzasEmpresasModel.ConfigurarIndicadores" />
+          <EntitySet Name="IndicadoresCalculados" EntityType="FinanzasEmpresasModel.IndicadoresCalculados" />
+          <FunctionImport Name="ActualizarIndicador1">
+            <Parameter Name="ValorFormula" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ObtenerIndicadoresActivosConNombre" />
           </EntityContainer>
         <EntityType Name="CargasArchivos">
           <Key>
@@ -338,6 +373,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ConfigurarIndicadores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Indicador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="NombreIndicador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Formula" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="IndicadoresCalculados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CuentaId" Type="Int32" />
+          <Property Name="Indicador1" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador2" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador3" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador4" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Indicador5" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -419,6 +477,33 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SP_InsertarDatosEstadosFinancieros" FunctionName="FinanzasEmpresasModel.Store.SP_InsertarDatosEstadosFinancieros" />
+          <EntitySetMapping Name="ConfigurarIndicadores">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.ConfigurarIndicadores">
+              <MappingFragment StoreEntitySet="ConfigurarIndicadores">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Formula" ColumnName="Formula" />
+                <ScalarProperty Name="NombreIndicador" ColumnName="NombreIndicador" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Indicador" ColumnName="Indicador" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndicadoresCalculados">
+            <EntityTypeMapping TypeName="FinanzasEmpresasModel.IndicadoresCalculados">
+              <MappingFragment StoreEntitySet="IndicadoresCalculados">
+                <ScalarProperty Name="Indicador5" ColumnName="Indicador5" />
+                <ScalarProperty Name="Indicador4" ColumnName="Indicador4" />
+                <ScalarProperty Name="Indicador3" ColumnName="Indicador3" />
+                <ScalarProperty Name="Indicador2" ColumnName="Indicador2" />
+                <ScalarProperty Name="Indicador1" ColumnName="Indicador1" />
+                <ScalarProperty Name="CuentaId" ColumnName="CuentaId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ActualizarIndicador1" FunctionName="FinanzasEmpresasModel.Store.ActualizarIndicador1" />
+          <FunctionImportMapping FunctionImportName="ObtenerIndicadoresActivosConNombre" FunctionName="FinanzasEmpresasModel.Store.ObtenerIndicadoresActivosConNombre" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
