@@ -245,4 +245,4 @@ AppPackages/
 *.zip
 *.msi
 /Librerias
-/SolucionEmpresas/Uploads
+/SolucionEmpresas/Uploads.vs/ git add .gitignore git commit -m Ignore Visual Studio .vs folder
