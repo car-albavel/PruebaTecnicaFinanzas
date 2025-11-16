@@ -238,7 +238,7 @@
           <EntitySet Name="ConfigurarIndicadores" EntityType="FinanzasEmpresasModel.ConfigurarIndicadores" />
           <EntitySet Name="IndicadoresCalculados" EntityType="FinanzasEmpresasModel.IndicadoresCalculados" />
           <FunctionImport Name="ActualizarIndicador1">
-            <Parameter Name="ValorFormula" Mode="In" Type="String" />
+          <Parameter Name="ValorFormula" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ObtenerIndicadoresActivosConNombre" />
           </EntityContainer>

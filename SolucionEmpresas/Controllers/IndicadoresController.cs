@@ -1,154 +1,176 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using SolucionEmpresas.Models;
+using SolucionEmpresas.Services;
 
 namespace TuAplicacion.Controllers
 {
     public class IndicadoresController : Controller
     {
-        private dbFinanzasEmpresaEntities db = new dbFinanzasEmpresaEntities();
+        //public ActionResult Index()
+        //{
 
-        // GET: Indicadores
-        public ActionResult Index(int? empresaId, int? anio, int? mes)
+
+        //    var datos = new TraerIndicadores().ObtenerIndicadoresDinamico();
+
+        //    var columnas = datos
+        //        .SelectMany(f => f.Keys)
+        //        .Distinct()
+        //        .ToList();
+
+
+
+        //    TablaDinamicaViewModel modelo = new TablaDinamicaViewModel()
+        //    {
+        //        Filas = datos,
+        //        Columnas = columnas
+        //    };
+
+        //    return View(modelo);
+        //}
+
+        private readonly TraerIndicadores _service = new TraerIndicadores();
+
+        // /Home/Index?filtroNombreEmpresa=...&filtroPeriodo=...&filtroCuentaId=...
+        public ActionResult Index(string filtroNombreEmpresa, string filtroPeriodo, int? filtroCuentaId, string[] columnasSeleccionadas)
         {
-            var indicadores = db.Indicadores.AsQueryable();
+            var filas = _service.ObtenerIndicadoresDinamico(); // o tu método dinámico actual
 
-            if (empresaId.HasValue)
-            {
-                indicadores = indicadores.Where(i => i.EmpresaId == empresaId);
-            }
+            // 1) Construir combo de Periodos con formato dd/MM/yyyy
+            var periodosBrutos = filas
+                .Where(f => f.ContainsKey("Periodo") && f["Periodo"] != null)
+                .Select(f => f["Periodo"])
+                .Distinct()
+                .ToList();
 
-            if (anio.HasValue)
-            {
-                indicadores = indicadores.Where(i => i.Periodo.Year == anio);
-            }
-
-            if (mes.HasValue)
-            {
-                indicadores = indicadores.Where(i => i.Periodo.Month == mes);
-            }
-
-            ViewBag.Empresas = new SelectList(db.Empresas.Where(e => e.Estado), "EmpresaId", "NombreEmpresa", empresaId);
-            ViewBag.EmpresaId = empresaId;
-            ViewBag.Anio = anio;
-            ViewBag.Mes = mes;
-
-            return View(indicadores.ToList());
-        }
-
-        // GET: Indicadores/Create
-        public ActionResult Create(int? empresaId)
-        {
-            var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", empresaId);
-            return View();
-        }
-
-        // POST: Indicadores/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmpresaId,Nombre,Descripcion,Formula,Valor,Periodo")] Indicadores indicador)
-        {
-            if (ModelState.IsValid)
-            {
-                indicador.Activo = true;
-                db.Indicadores.Add(indicador);
-                db.SaveChanges();
-                return RedirectToAction("Index", new { empresaId = indicador.EmpresaId });
-            }
-
-            var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", indicador.EmpresaId);
-            return View(indicador);
-        }
-
-        // GET: Indicadores/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Indicadores indicador = db.Indicadores.Find(id);
-            if (indicador == null)
-            {
-                return HttpNotFound();
-            }
-
-            var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", indicador.EmpresaId);
-            return View(indicador);
-        }
-
-        // POST: Indicadores/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,EmpresaId,Nombre,Descripcion,Formula,Valor,Periodo,Activo")] Indicadores indicador)
-        {
-            if (ModelState.IsValid)
-            {
-                var indicadorExistente = db.Indicadores.Find(indicador.Id);
-                if (indicadorExistente != null)
+            var periodosUnicos = periodosBrutos
+                .Select(p =>
                 {
-                    indicadorExistente.Nombre = indicador.Nombre;
-                    indicadorExistente.Descripcion = indicador.Descripcion;
-                    indicadorExistente.Formula = indicador.Formula;
-                    indicadorExistente.Valor = indicador.Valor;
-                    indicadorExistente.Periodo = indicador.Periodo;
-                    indicadorExistente.Activo = indicador.Activo;
-                    db.SaveChanges();
+                    DateTime fecha;
+                    string value = p.ToString(); // valor original (para filtrar)
+                    string text;
+
+                    if (p is DateTime)
+                    {
+                        fecha = (DateTime)p;
+                        text = fecha.ToString("dd/MM/yyyy");
+                    }
+                    else if (DateTime.TryParse(p.ToString(), out fecha))
+                    {
+                        text = fecha.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+
+                    return new { Value = value, Text = text };
+                })
+                .OrderBy(x =>
+                {
+                    DateTime f;
+                    return DateTime.TryParse(x.Value, out f) ? f : DateTime.MaxValue;
+                })
+                .ToList();
+
+            var listaPeriodos = new List<SelectListItem>();
+            listaPeriodos.Add(new SelectListItem { Value = "", Text = "-- Todos --" });
+            listaPeriodos.AddRange(
+                periodosUnicos.Select(p => new SelectListItem
+                {
+                    Value = p.Value,
+                    Text = p.Text,
+                    Selected = (p.Value == filtroPeriodo)
+                })
+            );
+
+            // 2) Filtros sobre filas
+            IEnumerable<Dictionary<string, object>> query = filas;
+
+            if (!string.IsNullOrWhiteSpace(filtroNombreEmpresa))
+            {
+                query = query.Where(f =>
+                    f.ContainsKey("NombreEmpresa") &&
+                    f["NombreEmpresa"] != null &&
+                    f["NombreEmpresa"].ToString()
+                        .IndexOf(filtroNombreEmpresa, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filtroPeriodo))
+            {
+                query = query.Where(f =>
+                    f.ContainsKey("Periodo") &&
+                    f["Periodo"] != null &&
+                    f["Periodo"].ToString() == filtroPeriodo);
+            }
+
+            var filasFiltradas = query.ToList();
+
+            // 3) Columnas (todas y visibles)
+
+            // Ahora: respeta el orden del primer registro y añade las demás al final
+            var todasLasColumnas = new List<string>();
+
+            foreach (var fila in filasFiltradas)
+            {
+                foreach (var col in fila.Keys)
+                {
+                    if (!todasLasColumnas.Contains(col))
+                    {
+                        todasLasColumnas.Add(col);
+                    }
                 }
-
-                return RedirectToAction("Index", new { empresaId = indicador.EmpresaId });
             }
 
-            var empresas = db.Empresas.Where(e => e.Estado).ToList();
-            ViewBag.Empresas = new SelectList(empresas, "Id", "Nombre", indicador.EmpresaId);
-            return View(indicador);
-        }
 
-        // GET: Indicadores/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
+            // Columnas que el usuario puede activar/desactivar
+            var columnasFiltrables = todasLasColumnas
+                .Where(c => c != "NombreEmpresa" && c != "Periodo")
+                .ToList();
+
+            List<string> columnasVisibles;
+
+            // columnasSeleccionadas solo aplica a las columnas filtrables
+            if (columnasSeleccionadas == null || columnasSeleccionadas.Length == 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                columnasVisibles = columnasFiltrables;
             }
-
-            Indicadores indicador = db.Indicadores.Find(id);
-            if (indicador == null)
+            else
             {
-                return HttpNotFound();
+                columnasVisibles = columnasFiltrables
+                    .Where(c => columnasSeleccionadas.Contains(c))
+                    .ToList();
             }
 
-            return View(indicador);
-        }
+            // Añadimos SIEMPRE NombreEmpresa y Periodo al conjunto visible, en el orden correcto
+            var columnasFinales = new List<string>();
 
-        // POST: Indicadores/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Indicadores indicador = db.Indicadores.Find(id);
-            if (indicador != null)
+            foreach (var col in todasLasColumnas)
             {
-                indicador.Activo = false;
-                db.SaveChanges();
+                if (col == "NombreEmpresa" || col == "Periodo")
+                {
+                    columnasFinales.Add(col); // siempre
+                }
+                else if (columnasVisibles.Contains(col))
+                {
+                    columnasFinales.Add(col); // solo si está seleccionada
+                }
             }
 
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            var modelo = new TablaDinamicaViewModel
             {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+                Filas = filasFiltradas,
+                Columnas = columnasFinales,
+                FiltroNombreEmpresa = filtroNombreEmpresa,
+                FiltroPeriodo = filtroPeriodo,
+                Periodos = listaPeriodos,
+                ColumnasSeleccionadas = columnasVisibles,
+                TodasLasColumnas = todasLasColumnas
+            };
+
+            return View(modelo);
         }
     }
 }

@@ -1,1 +1,79 @@
-﻿hola
+﻿@model SolucionEmpresas.Models.TablaDinamicaViewModel
+
+<h2>Indicadores (tabla dinámica)</h2>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+<div class="form-inline">
+    <div class="form-group" style="margin-right:10px;">
+        <label for="filtroNombreEmpresa">Nombre Empresa:</label>
+        @Html.TextBox("filtroNombreEmpresa", Model.FiltroNombreEmpresa,
+            new { @class = "form-control", style = "margin-left:5px;" })
+    </div>
+
+    <div class="form-group" style="margin-right:10px;">
+        <label for="filtroPeriodo">Periodo:</label>
+        @Html.DropDownList(
+            "filtroPeriodo",
+            Model.Periodos,
+            new { @class = "form-control", style = "margin-left:5px;" }
+        )
+    </div>
+</div>
+
+        <hr />
+
+        <div>
+            <strong>Columnas a mostrar:</strong><br />
+            @foreach (var col in Model.TodasLasColumnas)
+            {
+                // Estas columnas no se pueden ocultar, así que no se muestran como checkbox
+                if (col == "NombreEmpresa" || col == "Periodo")
+                {
+                    continue;
+                }
+
+                var isChecked = Model.ColumnasSeleccionadas == null
+                    ? true
+                    : Model.ColumnasSeleccionadas.Contains(col);
+
+                <label style="margin-right:10px;">
+                    <input type="checkbox"
+                            name="columnasSeleccionadas"
+                            value="@col"
+                            @(isChecked ? "checked=\"checked\"" : "") />
+                    @col
+                </label>
+            }
+        </div>
+
+    <br />
+
+        <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+                        <a href="@Url.Action("Index", "Home")"
+                            class="btn btn-default" style="margin-left:5px;">Limpiar</a>}
+
+<br />
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var col in Model.Columnas)
+            {
+<th>@col</th>            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fila in Model.Filas)
+        {
+<tr>
+    @foreach (var col in Model.Columnas)
+    {
+<td>
+    @{ object valor;
+                            var tieneColumna = fila.TryGetValue(col, out valor); }
+    @(tieneColumna ? (valor ?? "").ToString() : "")
+</td>                }
+</tr>}
+    </tbody>
+</table>
