@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SolucionEmpresas.Models.ConfigurarIndicadores>
+
+@{ ViewBag.Title = "Indicadores"; }
+
+<h2>Indicadores</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Indicador</th>
+            <th>Activo</th>
+            <th>NombreIndicador</th>
+            <th>Formula</th>
+            <th>Descripcion</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>@item.Indicador</td>
+    <td>@(item.Activo ? "Sí" : "No")</td>
+    <td>@item.NombreIndicador</td>
+    <td>@item.Formula</td>
+    <td>@item.Descripcion</td>
+    <td>
+        @* el controlador recibe el Indicador *@
+        @Html.ActionLink(
+            "Editar",
+            "Edit",
+            "ConfigurarIndicadores",
+            new { indicador = item.Indicador },
+            new { @class = "btn btn-primary btn-sm" })
+    </td>
+</tr>}
+    </tbody>
+</table>

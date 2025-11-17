@@ -9,27 +9,6 @@ namespace TuAplicacion.Controllers
 {
     public class IndicadoresController : Controller
     {
-        //public ActionResult Index()
-        //{
-
-
-        //    var datos = new TraerIndicadores().ObtenerIndicadoresDinamico();
-
-        //    var columnas = datos
-        //        .SelectMany(f => f.Keys)
-        //        .Distinct()
-        //        .ToList();
-
-
-
-        //    TablaDinamicaViewModel modelo = new TablaDinamicaViewModel()
-        //    {
-        //        Filas = datos,
-        //        Columnas = columnas
-        //    };
-
-        //    return View(modelo);
-        //}
 
         private readonly TraerIndicadores _service = new TraerIndicadores();
 

@@ -129,6 +129,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CargasController.cs" />
+    <Compile Include="Controllers\ConfigurarIndicadoresController.cs" />
     <Compile Include="Controllers\CuentasController.cs" />
     <Compile Include="Controllers\EmpresasController.cs" />
     <Compile Include="Controllers\EstadosFinancierosController.cs" />
@@ -241,6 +242,8 @@
     <Content Include="Views\EstadosFinancieros\Create.cshtml" />
     <Content Include="Views\EstadosFinancieros\Edit.cshtml" />
     <Content Include="Views\Indicadores\Index.cshtml" />
+    <Content Include="Views\ConfigurarIndicadores\Edit.cshtml" />
+    <Content Include="Views\ConfigurarIndicadores\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

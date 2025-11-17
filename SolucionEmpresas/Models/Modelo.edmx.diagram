@@ -14,8 +14,8 @@
         <AssociationConnector Association="FinanzasEmpresasModel.FK__Cuentas__Empresa__37A5467C" />
         <AssociationConnector Association="FinanzasEmpresasModel.FK__EstadosFi__Empre__286302EC" />
         <AssociationConnector Association="FinanzasEmpresasModel.FK__Indicador__Empre__30F848ED" />
-        <EntityTypeShape EntityType="FinanzasEmpresasModel.ConfigurarIndicadores" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="FinanzasEmpresasModel.IndicadoresCalculados" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="FinanzasEmpresasModel.ConfigurarIndicadores" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

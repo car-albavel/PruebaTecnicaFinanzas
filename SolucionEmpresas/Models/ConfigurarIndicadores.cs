@@ -14,7 +14,6 @@ namespace SolucionEmpresas.Models
     
     public partial class ConfigurarIndicadores
     {
-        public int Id { get; set; }
         public string Indicador { get; set; }
         public bool Activo { get; set; }
         public string NombreIndicador { get; set; }

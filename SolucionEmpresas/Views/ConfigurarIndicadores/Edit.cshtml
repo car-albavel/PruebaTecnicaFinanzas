@@ -1,0 +1,69 @@
+﻿@model SolucionEmpresas.Models.ConfigurarIndicadores
+
+@{ ViewBag.Title = "Editar Indicador"; }
+
+<h2>Editar Indicador</h2>
+
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <hr />
+
+                    @* Indicador: clave que usa el controlador. No editable *@
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Indicador, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(m => m.Indicador)
+                            @Html.HiddenFor(m => m.Indicador)
+                        </div>
+                    </div>
+
+                    @* Activo (editable) *@
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Activo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.Activo) Activo
+                                </label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Activo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @* NombreIndicador (editable) *@
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.NombreIndicador, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.NombreIndicador, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.NombreIndicador, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @* Formula (editable) *@
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Formula, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(m => m.Formula, 3, 60, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Formula, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @* Descripcion (editable) *@
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(m => m.Descripcion, 3, 60, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Guardar" class="btn btn-success" />
+                            @Html.ActionLink("Volver al listado", "Index", null, new { @class = "btn btn-default", style = "margin-left:10px;" })
+                        </div>
+                    </div>
+                </div>}

@@ -32,8 +32,8 @@ namespace SolucionEmpresas.Models
         public virtual DbSet<Empresas> Empresas { get; set; }
         public virtual DbSet<EstadosFinancieros> EstadosFinancieros { get; set; }
         public virtual DbSet<Indicadores> Indicadores { get; set; }
-        public virtual DbSet<ConfigurarIndicadores> ConfigurarIndicadores { get; set; }
         public virtual DbSet<IndicadoresCalculados> IndicadoresCalculados { get; set; }
+        public virtual DbSet<ConfigurarIndicadores> ConfigurarIndicadores { get; set; }
     
         public virtual int CalcularIndicadores()
         {
