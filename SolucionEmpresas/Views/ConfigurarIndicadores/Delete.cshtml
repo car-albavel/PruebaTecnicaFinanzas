@@ -1,0 +1,61 @@
+﻿@model SolucionEmpresas.Models.EstadosFinancieros
+
+@{
+    ViewBag.Title = "Eliminar Estado Financiero";
+}
+
+<h2>Eliminar Estado Financiero</h2>
+
+<h3>¿Seguro que deseas eliminar este estado financiero?</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Empresa</dt>
+        <dd>@(Model.Empresas != null ? Model.Empresas.NombreEmpresa : Model.EmpresaId.ToString())</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Periodo)</dt>
+        <dd>@Html.DisplayFor(m => m.Periodo)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Activa)</dt>
+        <dd>@Html.DisplayFor(m => m.Activa)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.ActivoCorriente)</dt>
+        <dd>@Html.DisplayFor(m => m.ActivoCorriente)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.PasivoCorriente)</dt>
+        <dd>@Html.DisplayFor(m => m.PasivoCorriente)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.ActivoTotal)</dt>
+        <dd>@Html.DisplayFor(m => m.ActivoTotal)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.PasivoTotal)</dt>
+        <dd>@Html.DisplayFor(m => m.PasivoTotal)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Patrimonio)</dt>
+        <dd>@Html.DisplayFor(m => m.Patrimonio)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.IngresosOperacionales)</dt>
+        <dd>@Html.DisplayFor(m => m.IngresosOperacionales)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.UtilidadBruta)</dt>
+        <dd>@Html.DisplayFor(m => m.UtilidadBruta)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.UtilidadOperativa)</dt>
+        <dd>@Html.DisplayFor(m => m.UtilidadOperativa)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.UtilidadNeta)</dt>
+        <dd>@Html.DisplayFor(m => m.UtilidadNeta)</dd>
+    </dl>
+
+    @using (Html.BeginForm("Delete", "EstadosFinancieros", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.EstadoId)
+
+        <div class="form-actions">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            @Html.ActionLink("Cancelar", "Index", new { empresaId = Model.EmpresaId }, new { @class = "btn btn-default", style = "margin-left:10px;" })
+        </div>
+    }
+</div>
