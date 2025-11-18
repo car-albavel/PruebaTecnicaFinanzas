@@ -172,8 +172,8 @@ namespace TuAplicacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            EstadosFinancieros estado = db.EstadosFinancieros.Find(id);
-            IndicadoresCalculados indicadores = db.IndicadoresCalculados.Find(id);
+            EstadosFinancieros estado = db.EstadosFinancieros.SingleOrDefault(c => c.EstadoId == id);
+            IndicadoresCalculados indicadores = db.IndicadoresCalculados.SingleOrDefault(c => c.CuentaId == id);
             if (estado != null)
             {
                 db.EstadosFinancieros.Remove(estado);
