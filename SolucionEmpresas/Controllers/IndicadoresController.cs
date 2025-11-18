@@ -13,7 +13,7 @@ namespace TuAplicacion.Controllers
         private readonly TraerIndicadores _service = new TraerIndicadores();
 
         // /Home/Index?filtroNombreEmpresa=...&filtroPeriodo=...&filtroCuentaId=...
-        public ActionResult Index(string filtroNombreEmpresa, string filtroPeriodo, int? filtroCuentaId, string[] columnasSeleccionadas)
+        public ActionResult Index(string filtroNombreEmpresa, string filtroPeriodo, string[] columnasSeleccionadas)
         {
             var filas = _service.ObtenerIndicadoresDinamico(); // o tu método dinámico actual
 
