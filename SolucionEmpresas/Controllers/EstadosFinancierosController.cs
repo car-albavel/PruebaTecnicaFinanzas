@@ -72,7 +72,19 @@ namespace TuAplicacion.Controllers
             {
                 estado.FechaCargue = DateTime.Now;
                 db.EstadosFinancieros.Add(estado);
+                
+
+                IndicadoresCalculados indicadoresCalculados = new IndicadoresCalculados() 
+                {
+                    CuentaId = estado.EstadoId,
+                    Indicador1 = 0, Indicador2 = 0, Indicador3 = 0, Indicador4 = 0, Indicador5 = 0
+                };
+
+                db.IndicadoresCalculados.Add(indicadoresCalculados);
+
                 db.SaveChanges();
+
+                db.RecalcularResultadosIndicadores();
 
                 TempData["Mensaje"] = "Estado Financiero creado exitosamente.";
                 return RedirectToAction("Index", new { empresaId = estado.EmpresaId });
@@ -161,9 +173,11 @@ namespace TuAplicacion.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             EstadosFinancieros estado = db.EstadosFinancieros.Find(id);
+            IndicadoresCalculados indicadores = db.IndicadoresCalculados.Find(id);
             if (estado != null)
             {
                 db.EstadosFinancieros.Remove(estado);
+                db.IndicadoresCalculados.Remove(indicadores);
                 db.SaveChanges();
                 TempData["Mensaje"] = "Estado Financiero eliminado exitosamente.";
             }

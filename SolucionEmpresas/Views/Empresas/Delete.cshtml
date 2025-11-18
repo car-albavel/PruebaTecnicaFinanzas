@@ -1,0 +1,42 @@
+﻿@model SolucionEmpresas.Models.Empresas
+
+@{
+    ViewBag.Title = "Desactivar Empresa";
+}
+
+<h2>Desactivar Empresa</h2>
+
+<h3>¿Seguro que deseas desactivar esta empresa?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(m => m.EmpresaId)</dt>
+        <dd>@Html.DisplayFor(m => m.EmpresaId)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.NombreEmpresa)</dt>
+        <dd>@Html.DisplayFor(m => m.NombreEmpresa)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.NIT)</dt>
+        <dd>@Html.DisplayFor(m => m.NIT)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Direccion)</dt>
+        <dd>@Html.DisplayFor(m => m.Direccion)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Telefono)</dt>
+        <dd>@Html.DisplayFor(m => m.Telefono)</dd>
+
+        <dt>@Html.DisplayNameFor(m => m.Estado)</dt>
+        <dd>@(Model.Estado ? "Activa" : "Inactiva")</dd>
+    </dl>
+
+    @using (Html.BeginForm("Delete", "Empresas", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.EmpresaId)
+
+        <div class="form-actions">
+            <input type="submit" value="Confirmar" class="btn btn-danger" />
+            @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default", style = "margin-left:10px;" })
+        </div>
+    }
+</div>

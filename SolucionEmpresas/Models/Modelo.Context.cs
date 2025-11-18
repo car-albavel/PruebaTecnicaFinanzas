@@ -104,5 +104,10 @@ namespace SolucionEmpresas.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ObtenerIndicadoresActivosConNombre");
         }
+    
+        public virtual int RecalcularResultadosIndicadores()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RecalcularResultadosIndicadores");
+        }
     }
 }

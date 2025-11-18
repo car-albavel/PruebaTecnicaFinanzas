@@ -101,6 +101,7 @@
           <Parameter Name="ValorFormula" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="ObtenerIndicadoresActivosConNombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="RecalcularResultadosIndicadores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_InsertarDatosEstadosFinancieros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmpresaId" Type="int" Mode="In" />
           <Parameter Name="Fecha" Type="date" Mode="In" />
@@ -167,6 +168,7 @@
           </FunctionImport>
           <FunctionImport Name="ObtenerIndicadoresActivosConNombre" />
           <EntitySet Name="ConfigurarIndicadores" EntityType="FinanzasEmpresasModel.ConfigurarIndicadores" />
+          <FunctionImport Name="RecalcularResultadosIndicadores" />
           </EntityContainer>
         <EntityType Name="CargasArchivos">
           <Key>
@@ -344,6 +346,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RecalcularResultadosIndicadores" FunctionName="FinanzasEmpresasModel.Store.RecalcularResultadosIndicadores" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
