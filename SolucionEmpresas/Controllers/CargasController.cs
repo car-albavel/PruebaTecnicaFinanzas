@@ -43,6 +43,8 @@ namespace SolucionEmpresas.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(int empresaId, HttpPostedFileBase archivo)
         {
+            EstadosFinancieros estadoFinaCreado = new EstadosFinancieros();
+
             if (archivo != null && archivo.ContentLength > 0)
             {
                 try
@@ -88,6 +90,24 @@ namespace SolucionEmpresas.Controllers
                         // Ejecutar el stored procedure
                         int resultado = this.db.SP_InsertarDatosEstadosFinancieros(datos1.EmpresaId, datos1.Fecha, datos1.Periodo, datos1.ActivoCorriente, datos1.PasivoCorriente,
                             datos1.ActivoTotal, datos1.PasivoTotal, datos1.Patrimonio, datos1.IngresosOperacionales, datos1.UtilidadBruta, datos1.UtilidadOperativa, datos1.UtilidadNeta);
+
+
+                        estadoFinaCreado = db.EstadosFinancieros.OrderByDescending(c => c.FechaCargue).FirstOrDefault(c => c.EmpresaId == datos1.EmpresaId);
+
+                        IndicadoresCalculados indicadoresCalculados = new IndicadoresCalculados()
+                        {
+                            CuentaId = estadoFinaCreado.EstadoId,
+                            Indicador1 = 0,
+                            Indicador2 = 0,
+                            Indicador3 = 0,
+                            Indicador4 = 0,
+                            Indicador5 = 0
+                        };
+
+                        db.IndicadoresCalculados.Add(indicadoresCalculados);
+
+                        db.SaveChanges();
+
                     }
 
                     CargasArchivos cargasArchivos = db.CargasArchivos.Add(carga);
