@@ -73,11 +73,20 @@ namespace TuAplicacion.Controllers
                 estado.FechaCargue = DateTime.Now;
                 db.EstadosFinancieros.Add(estado);
                 
+                db.SaveChanges();
 
-                IndicadoresCalculados indicadoresCalculados = new IndicadoresCalculados() 
+                EstadosFinancieros estadoFinaCreado = new EstadosFinancieros();
+
+                estadoFinaCreado = db.EstadosFinancieros.OrderByDescending(c => c.FechaCargue).FirstOrDefault(c => c.EmpresaId == estado.EmpresaId);
+
+                IndicadoresCalculados indicadoresCalculados = new IndicadoresCalculados()
                 {
-                    CuentaId = estado.EstadoId,
-                    Indicador1 = 0, Indicador2 = 0, Indicador3 = 0, Indicador4 = 0, Indicador5 = 0
+                    CuentaId = estadoFinaCreado.EstadoId,
+                    Indicador1 = 0,
+                    Indicador2 = 0,
+                    Indicador3 = 0,
+                    Indicador4 = 0,
+                    Indicador5 = 0
                 };
 
                 db.IndicadoresCalculados.Add(indicadoresCalculados);
@@ -177,7 +186,10 @@ namespace TuAplicacion.Controllers
             if (estado != null)
             {
                 db.EstadosFinancieros.Remove(estado);
-                db.IndicadoresCalculados.Remove(indicadores);
+                  if(indicadores != null)
+                    {
+                        db.IndicadoresCalculados.Remove(indicadores);
+                    }
                 db.SaveChanges();
                 TempData["Mensaje"] = "Estado Financiero eliminado exitosamente.";
             }

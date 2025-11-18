@@ -44,7 +44,7 @@ namespace SolucionEmpresas.Controllers
         // POST: Empresas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,NIT,Direccion,Telefono,Activa")] Empresas empresa)
+        public ActionResult Create([Bind(Include = "NombreEmpresa,NIT,Direccion,Telefono,Activa")] Empresas empresa)
         {
             if (ModelState.IsValid)
             {
@@ -114,6 +114,12 @@ namespace SolucionEmpresas.Controllers
                 return HttpNotFound();
             }
 
+            var cuentasAsociadas = db.EstadosFinancieros.FirstOrDefault(c => c.EmpresaId == id);
+            if(cuentasAsociadas != null)
+            {
+                TempData["Mensaje"] = "Esta Empresa tiene cuentas asociadas";
+            }
+
             return View(empresa);
         }
 
@@ -122,10 +128,19 @@ namespace SolucionEmpresas.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            var cuentasAsociadas = db.EstadosFinancieros.FirstOrDefault(c => c.EmpresaId == id);
+            if (cuentasAsociadas != null)
+            {
+                TempData["Mensaje2"] = "Esta Empresa tiene cuentas asociadas";
+                Empresas empresa2 = db.Empresas.Find(id);
+                return View(empresa2);
+            }
+
+
             Empresas empresa = db.Empresas.Find(id);
             if (empresa != null)
             {
-                empresa.Estado = true;
+                db.Empresas.Remove(empresa);
                 db.SaveChanges();
             }
 
