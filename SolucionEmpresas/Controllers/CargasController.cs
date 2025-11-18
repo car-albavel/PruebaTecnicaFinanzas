@@ -113,6 +113,8 @@ namespace SolucionEmpresas.Controllers
                     CargasArchivos cargasArchivos = db.CargasArchivos.Add(carga);
                     db.SaveChanges();
 
+                    db.RecalcularResultadosIndicadores();
+
                     ViewBag.Mensaje = "Archivo cargado exitosamente.";
                     return RedirectToAction("Index", new { empresaId = empresaId });
                 }
